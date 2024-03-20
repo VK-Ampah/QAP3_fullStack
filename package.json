@@ -1,0 +1,23 @@
+{
+  "name": "qap3_fullstack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VK-Ampah/QAP3_fullStack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VK-Ampah/QAP3_fullStack/issues"
+  },
+  "homepage": "https://github.com/VK-Ampah/QAP3_fullStack#readme",
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
