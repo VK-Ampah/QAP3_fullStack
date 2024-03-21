@@ -4,7 +4,7 @@ const port = 3000;
 const path = require('path');
 global.DEBUG = true;
 
-global.__basedir = __dirname;
+
 
 // // middleware
 // app.use((req, res, next) => {
