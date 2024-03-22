@@ -13,24 +13,26 @@ const getUsers = async () => {
 };
 
 // Retrieve a user by id
-const getUserByUserName = async (id) => {
-    const query = 'SELECT * FROM users WHERE username = $1;';
+const getUserById = async (id) => {
+    const query = 'SELECT * FROM users WHERE user_id = $1;';
     const values = [id];
     try {
         const res = await pool.query(query, values);
+        if (res.rows.length === 0) {
+            throw new Error(`User with id ${id} not found`);
+        }
         return res.rows[0];
     }
     catch (err) {
-        console.error('Error executing getUserByUserName query', err.stack);
+        console.error('Error executing getUserById query', err.stack);
         throw err;
     }
-
 };
 
 
 // Add a new user
 const addUser = async (firstname,middlename,lastname,email,username,image_url) => {
-    const query = 'INSERT INTO users (firstname,middlename,lastname,email,username) VALUES ($1, $2, $3, $4, $5) RETURNING *;';
+    const query = 'INSERT INTO users (first_name,middle_name,last_name,email,username,image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;';
     const values = [firstname,middlename,lastname,email,username,image_url];
     try {
         const res = await pool.query(query, values);
@@ -70,7 +72,7 @@ const deleteUser = async (id) => {
 
 module.exports = {
     getUsers,
-    getUserByUserName,
+    getUserById,
     addUser,
     updateUser,
     deleteUser
