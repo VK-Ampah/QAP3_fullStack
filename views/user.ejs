@@ -2,7 +2,7 @@
 <%- include ('./partials/head.ejs') %>
 <body class="w-full h-screen text-white">
     <div class="w-full h-full">
-        <div class="bg-black flex flex-col justify-center items-center">
+        <div class="bg-cyan-300 flex flex-col justify-center items-center">
             <h1 class="text-red-700 ml-6 mb-10">Displaying a user </h1>
             <div class="flex flex-row">
                 
@@ -12,7 +12,18 @@
                     <h1 class="text-red-700 ml-6"><%= user.first_name +' '+user.last_name %></h1>
                     <p class="text-cyan-800"><%= user.username%></p>
                 </div>
-               
+
+                <h1 class="text-red-700 ml-6">
+                    <a href="/users/<%= user.user_id %>/edit">                        
+                        Update User
+                    </a>
+                </h1>
+                <h1 class="text-red-700 ml-6">
+                    <a href="/users/<%= user.user_id %>/edit">
+                        <%= user.first_name +' '+user.last_name %>
+                    </a>
+                </h1>
+
             </div>
         </div>
 </body>

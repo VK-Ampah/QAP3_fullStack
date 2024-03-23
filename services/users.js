@@ -44,10 +44,11 @@ const addUser = async (firstname,middlename,lastname,email,username,image_url) =
 
 };
 
-// Update a user
-const updateUser = async (id, name, email, username, image) => {
-    const query = 'UPDATE users SET name = $1, email = $2, username = $3 WHERE id = $4 RETURNING *;';
-    const values = [name, email, username,image, id];
+
+// update a user
+const updateUser = async (id, firstname, middlename, lastname, email, username, image) => {
+    const query = 'UPDATE users SET first_name = $1, middle_name = $2, last_name = $3, email = $4, username = $5, image_url = $6 WHERE user_id = $7 RETURNING *;';
+    const values = [firstname, middlename, lastname, email, username, image, id];
     try {
         const res = await pool.query(query, values);
         return res.rows[0]; // Returns the updated user

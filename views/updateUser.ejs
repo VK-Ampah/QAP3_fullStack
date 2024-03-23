@@ -1,0 +1,23 @@
+<html>
+<%- include ('./partials/head.ejs') %>
+<body>
+    <h1>Update User</h1>
+   
+    <form action="/users/<%= user.user_id %>/edit?_method=PATCH" method="POST" enctype="multipart/form-data"> 
+        <input type="hidden" id="oldImage" name="oldImage" value="<%= user.image_url %>">
+        <label for="firstname">First Name:</label><br>
+        <input type="text" id="firstname" name="firstname" value="<%= user.first_name %>"><br>
+        <label for="middlename">Middle Name:</label><br>
+        <input type="text" id="middlename" name="middlename" value="<%= user.middle_name %>"><br>
+        <label for="lastname">Last Name:</label><br>
+        <input type="text" id="lastname" name="lastname" value="<%= user.last_name %>"><br>
+        <label for="email">Email:</label><br>
+        <input type="text" id="email" name="email" value="<%= user.email %>"><br>
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" value="<%= user.username %>"><br>
+        <label for="image">Image:</label><br>
+        <input type="file" id="image" name="image" accept="image/*"><br>
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>

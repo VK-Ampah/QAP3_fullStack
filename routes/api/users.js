@@ -10,6 +10,7 @@ const { getUsers,
 const multer = require('multer');
 const path = require('path');
 
+
 // create a middleware to store the images on the server and save the path to the database
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -21,9 +22,10 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
     }
 });
-
+// multer middleware
 const upload = multer({ storage: storage });
 
+// users routes
 // return all users
 router.get('/', async (req, res) => {
     console.log('inside the router')
@@ -37,14 +39,13 @@ router.get('/', async (req, res) => {
 );
 
 // Add a new user
-// Display the form for creating a new user
+// Render the form for creating a new user
 router.get('/create', (req, res) => {
     res.render('createUser');
 });
 
 // Handle the form submission
-//POST AND STORE IMAGES ON THE SERVER
-// ...
+//POST AND STORE IMAGES ON THE SERVER to server static files
 router.post('/create', upload.single('image'), async (req, res) => {
     console.log(req.body); // This will contain the text fields
     console.log(req.file); // This will contain the file
@@ -58,16 +59,48 @@ router.post('/create', upload.single('image'), async (req, res) => {
     }
 });
 
+
+/// UPDATE USER
+// render user edit page
+router.get('/:id/edit', async (req, res) => {
+    try {
+       console.log('GET /users/:id/edit');
+        const id = parseInt(req.params.id);
+        const user = await getUserById(id);
+        console.log(`GET /users/${id}/edit`);
+        console.log(user);       
+        res.render('updateUser', { user: user });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('An error occurred while fetching the user');
+    }
+});
+
+router.patch('/:id/edit', upload.single('image'), async (req, res) => {
+    try {
+        const imageUrl = req.file ? '/images/' + req.file.filename : req.body.oldImage;
+        const updatedUser = await updateUser(parseInt(req.params.id), req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, imageUrl);
+        console.log(updatedUser);
+        console.log(req.file ? req.file : 'no file');
+        console.log(req.body);
+        console.log(req.body.oldImage);   
+        res.redirect('/users/' + updatedUser.user_id);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('An error occurred while updating the user');
+    }
+});
+
 // return a user by id
 router.get('/:id', async (req, res) => {
     try {
-        console.log('GET /users/getUserById');
+        console.log('GET/users/getUserById');
         console.log(req.url);
-        console.log(req.headers.referer);
-        console.log(req.method);
-        console.log(req.body);
-        console.log(req.params);
-        console.log(req.cookies);
+        // console.log(req.headers.referer);
+        // console.log(req.method);
+        // console.log(req.body);
+        // console.log(req.params);
+        // console.log(req.cookies);
         const id = parseInt(req.params.id);
         console.log(id);
         const user = await getUserById(id);
@@ -81,17 +114,6 @@ router.get('/:id', async (req, res) => {
 }
 );
 
-// Update a user
-
-router.put('/:id/edit', async (req, res) => {
-    try {
-        const updatedUser = await updateUser(req.params.id, req.body.name, req.body.email, req.body.username, req.body.image);
-        res.render('userProfile', { user: updatedUser });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('An error occurred while updating the user');
-    }
-});
 // Delete a user
 router.delete('/delete/:id', async (req, res) => {
     res.send('DELETE /users');
@@ -100,11 +122,7 @@ router.delete('/delete/:id', async (req, res) => {
     console.log('DELETE /users');
 }
 );
-// router.use((req, res, next) => {
-//     console.log('users middleware'); 
-//     next();
-// }
-// );
+
 // Catch 404 and forward to error handler
 router.use((req, res, next) => {
     const error = new Error('Page Not Found');
