@@ -44,7 +44,6 @@ const addUser = async (firstname,middlename,lastname,email,username,image_url) =
 
 };
 
-
 // update a user
 const updateUser = async (id, firstname, middlename, lastname, email, username, image) => {
     const query = 'UPDATE users SET first_name = $1, middle_name = $2, last_name = $3, email = $4, username = $5, image_url = $6 WHERE user_id = $7 RETURNING *;';
@@ -60,7 +59,7 @@ const updateUser = async (id, firstname, middlename, lastname, email, username, 
 
 // Delete a user
 const deleteUser = async (id) => {
-    const query = 'DELETE FROM users WHERE id = $1 RETURNING *;';
+    const query = 'DELETE FROM users WHERE user_id = $1 RETURNING *;';
     const values = [id];
     try {
         const res = await pool.query(query, values);

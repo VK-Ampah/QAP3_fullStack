@@ -26,17 +26,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // users routes
-// return all users
-router.get('/', async (req, res) => {
-    console.log('inside the router')
-    res.setHeader('Content-Type', 'text/html');
-    res.status(200);
-    const users = await getUsers();
-    res.render('users', { users: users });
-    console.log(await getUsers());
-    // console.log('GET /users');
-}
-);
+
 
 // Add a new user
 // Render the form for creating a new user
@@ -114,12 +104,47 @@ router.get('/:id', async (req, res) => {
 }
 );
 
+router.get('/:id/delete', async (req, res) => {
+    try {
+        console.log('GET /users/:id/delete');
+        const id = parseInt(req.params.id);
+        const user = await getUserById(id);
+        console.log(user);
+        res.render('deleteUser', { user: user });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('An error occurred while fetching the user');
+    }
+}
+);
 // Delete a user
-router.delete('/delete/:id', async (req, res) => {
-    res.send('DELETE /users');
-    console.log(await deleteUser(req.params.id));
-    console.log(req.params);
-    console.log('DELETE /users');
+router.delete('/:id/delete', async (req, res) => {
+    try {
+        const deletedUser = await deleteUser(req.params.id);
+        console.log('DELETE /users' + req.params.id + '/delete');
+        console.log(deletedUser);
+        console.log(await deleteUser(req.params.id));
+        console.log(req.params);
+       
+        res.redirect('/users');
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send('An error occurred while deleting the user');
+    }
+}
+);
+
+// return all users
+router.get('/', async (req, res) => {
+    console.log('inside the router')
+    res.setHeader('Content-Type', 'text/html');
+    res.status(200);
+    const users = await getUsers();
+    res.render('users', { users: users });
+    console.log(await getUsers());
+    // console.log('GET /users');
 }
 );
 
