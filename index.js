@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
+const methodOverride = require('method-override');
 const port = 3000;
 const path = require('path');
 global.DEBUG = true;
 
-
 // configure views and static files
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method')); // moved after express.urlencoded
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
