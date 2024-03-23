@@ -6,6 +6,49 @@ const { getUsers,
     updateUser,
     deleteUser } = require('../../services/users');
 
+// add multer to handle file uploads
+const multer = require('multer');
+const path = require('path');
+
+
+// create a middleware to store the images on the server and save the path to the database
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'public')
+    },
+    filename: function(req, file, cb) {
+        // THE file is the file object that is being uploaded and has a property called 
+        // {originalname, fieldname, encoding, mimetype, size,buffer}
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    }
+});
+
+// const storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         const dir = path.join(__dirname, 'public', 'images');
+//         cb(null, dir);
+//     },
+//     filename: function(req, file, cb) {
+//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+//     }
+// });
+
+// const storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         // Adjust the directory to correctly point from the current file's location to the 'public/images' folder
+//         const dir = path.join(__dirname, '../../public/images');
+//         cb(null, dir);
+//     },
+//     filename: function(req, file, cb) {
+//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+//     }
+// });
+
+
+const upload = multer({ storage: storage });
+
+
+
 // return all users
 router.get('/', async (req, res) => {
     console.log('inside the router')
@@ -25,16 +68,44 @@ router.get('/create', (req, res) => {
 });
 
 // Handle the form submission
-router.post('/create', async (req, res) => {
-    console.log(req.body);
+// router.post('/create', async (req, res) => {
+//     console.log(req.body);
+//     try {
+//         const newUser = await addUser(req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, req.body.image_url);
+//         res.redirect('/users/' + newUser.user_id);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send('An error occurred while creating the user');
+//     }
+// });
+
+// router.post('/create', upload.single('image'), async (req, res) => {
+//     console.log(req.body); // This will contain the text fields
+//     console.log(req.file); // This will contain the file
+//     try {
+//         const newUser = await addUser(req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, req.file);
+//         res.redirect('/users/' + newUser.user_id);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send('An error occurred while creating the user');
+//     }
+// });
+
+/// POST AND STORE IMAGES ON THE SERVER
+// ...
+router.post('/create', upload.single('image'), async (req, res) => {
+    console.log(req.body); // This will contain the text fields
+    console.log(req.file); // This will contain the file
     try {
-        const newUser = await addUser(req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, req.body.image_url);
+        const imageUrl = '/public/' + req.file.filename;
+        const newUser = await addUser(req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, imageUrl);
         res.redirect('/users/' + newUser.user_id);
     } catch (err) {
         console.error(err);
         res.status(500).send('An error occurred while creating the user');
     }
 });
+
 // return a user by id
 router.get('/:id', async (req, res) => {
     try {
@@ -50,9 +121,6 @@ router.get('/:id', async (req, res) => {
         const user = await getUserById(id);
         console.log(user);
         res.render('user', { user: user });
-        console.log(req.params)
-        console.log(req.params.id)
-        console.log(parseInt(req.params.id)) 
     }
     catch (err) {
         console.error(err);
