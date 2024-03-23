@@ -5,14 +5,8 @@ const path = require('path');
 global.DEBUG = true;
 
 
-
-// // middleware
-// app.use((req, res, next) => {
-//     console.log('Time:', Date.now());
-//     next();
-//     });
-
 // configure views and static files
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -23,12 +17,12 @@ app.get('/', (req, res) => {
     // res.send('Hello World!');
     res.render('index');
     });
+// API routes
+const loginsRouter = require('./routes/api/logins');
+app.use('/logins', loginsRouter);
 
-const logins = require('./routes/api/logins');
-app.use('/logins', logins);
-
-const users = require('./routes/api/users');
-app.use('/users', users);
+const usersRouter = require('./routes/api/users');
+app.use('/users', usersRouter);
 
 app.use((req, res,next) => {
     res.status(404).send('Sorry cant find that!');
@@ -39,4 +33,4 @@ app.listen(port, () => {
     }
 );
 
-// Path: public/index.html
+

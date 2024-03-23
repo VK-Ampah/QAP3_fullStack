@@ -23,31 +23,7 @@ const storage = multer.diskStorage({
     }
 });
 
-// const storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         const dir = path.join(__dirname, 'public', 'images');
-//         cb(null, dir);
-//     },
-//     filename: function(req, file, cb) {
-//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-//     }
-// });
-
-// const storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         // Adjust the directory to correctly point from the current file's location to the 'public/images' folder
-//         const dir = path.join(__dirname, '../../public/images');
-//         cb(null, dir);
-//     },
-//     filename: function(req, file, cb) {
-//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-//     }
-// });
-
-
 const upload = multer({ storage: storage });
-
-
 
 // return all users
 router.get('/', async (req, res) => {
@@ -97,7 +73,7 @@ router.post('/create', upload.single('image'), async (req, res) => {
     console.log(req.body); // This will contain the text fields
     console.log(req.file); // This will contain the file
     try {
-        const imageUrl = '/public/' + req.file.filename;
+        const imageUrl = req.file.filename;
         const newUser = await addUser(req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, imageUrl);
         res.redirect('/users/' + newUser.user_id);
     } catch (err) {
