@@ -10,11 +10,10 @@ const { getUsers,
 const multer = require('multer');
 const path = require('path');
 
-
 // create a middleware to store the images on the server and save the path to the database
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, 'public')
+        cb(null, 'public/images')
     },
     filename: function(req, file, cb) {
         // THE file is the file object that is being uploaded and has a property called 
@@ -44,36 +43,13 @@ router.get('/create', (req, res) => {
 });
 
 // Handle the form submission
-// router.post('/create', async (req, res) => {
-//     console.log(req.body);
-//     try {
-//         const newUser = await addUser(req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, req.body.image_url);
-//         res.redirect('/users/' + newUser.user_id);
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send('An error occurred while creating the user');
-//     }
-// });
-
-// router.post('/create', upload.single('image'), async (req, res) => {
-//     console.log(req.body); // This will contain the text fields
-//     console.log(req.file); // This will contain the file
-//     try {
-//         const newUser = await addUser(req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, req.file);
-//         res.redirect('/users/' + newUser.user_id);
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send('An error occurred while creating the user');
-//     }
-// });
-
-/// POST AND STORE IMAGES ON THE SERVER
+//POST AND STORE IMAGES ON THE SERVER
 // ...
 router.post('/create', upload.single('image'), async (req, res) => {
     console.log(req.body); // This will contain the text fields
     console.log(req.file); // This will contain the file
     try {
-        const imageUrl = req.file.filename;
+        const imageUrl = '/images/' + req.file.filename;
         const newUser = await addUser(req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, imageUrl);
         res.redirect('/users/' + newUser.user_id);
     } catch (err) {
