@@ -33,7 +33,7 @@ const getUserById = async (id) => {
 // Add a new user
 const addUser = async (firstname,middlename,lastname,email,username,image_url) => {
     const query = 'INSERT INTO users (first_name,middle_name,last_name,email,username,image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;';
-    const values = [firstname,middlename,lastname,email,username,image_url];
+    const values = [firstname,middlename,lastname,email,username,image_url || null];
     try {
         const res = await pool.query(query, values);
         return res.rows[0];

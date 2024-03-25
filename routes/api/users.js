@@ -38,9 +38,9 @@ router.get('/create', (req, res) => {
 //POST AND STORE IMAGES ON THE SERVER to server static files
 router.post('/create', upload.single('image'), async (req, res) => {
     console.log(req.body); // This will contain the text fields
-    console.log(req.file); // This will contain the file
+    console.log(req.file? req.file : "" ); // This will contain the file
     try {
-        const imageUrl = '/images/' + req.file.filename;
+        const imageUrl = req.file? '/images/' + req.file.filename: null;
         const newUser = await addUser(req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, imageUrl);
         res.redirect('/users/' + newUser.user_id);
     } catch (err) {
