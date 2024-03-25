@@ -1,0 +1,120 @@
+<html lang="en">
+<%- include ('./partials/head.ejs') %>
+<body class="bg-gray-100">
+    <%- include ('./partials/navbar.ejs') %>
+    <main class="p-4 w-full">
+        <h1 class="text-3xl font-bold mb-4 text-center">Welcome to the 1949 Intermediate Soccer TEAM</h1>
+        <p class="mb-4 text-center">Your ultimate destination for everything soccer!</p>
+        
+        <!-- About Us -->
+
+        <!-- About Us -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4 text-center">About Us</h2>
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-4 bg-slate-900 text-white">
+                <div class="p-2">
+                    <p class="mb-2">Founded in the heart of St. John's, 1949-FC embodies the spirit of unity through diversity. Our club represents a tapestry of cultures, bringing together players from various backgrounds with a shared passion for soccer.</p>
+                    <p class="mb-2">At 1949-FC, we believe that diversity strengthens us on and off the field. Each player's unique story contributes to the rich fabric of our team, fostering a deep sense of belonging and community.</p>
+                </div>
+                <div class="p-2">
+                    <p class="mb-2">Our mission extends beyond winning matches; we aim to promote inclusivity, respect, and understanding through the universal language of soccer. By celebrating our differences, we inspire others to embrace diversity as a source of strength and unity.</p>
+                    <p>As we continue to grow, 1949-FC remains committed to creating an environment where every player feels valued and empowered to reach their full potential. Join us as we pave the way for a more inclusive and interconnected world through the beautiful game.</p>
+                </div>
+            </div>
+        </section>
+
+
+
+        
+        <!-- Latest News -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-2">Latest News</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- News Article -->
+                <article class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-semibold mb-2">News Title Here</h3>
+                    <p class="text-sm">Brief summary of the news article. Try and read through...</p>
+                    <a href="#" class="text-blue-500 hover:text-blue-700">Read More</a>
+                </article>
+                <!-- Repeat for more articles -->
+            </div>
+        </section>
+        
+        <!-- Upcoming Matches -->
+       
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-2">Upcoming Matches</h2>
+            <div class="overflow-x-auto">
+                <table class="table-auto w-full">
+                    <thead>
+                        <tr class="bg-gray-800 text-white">
+                            <th class="px-4 py-2">Date</th>
+                            <th class="px-4 py-2">Match</th>
+                            <th class="px-4 py-2">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        <tr class="bg-white">
+                            <td class="border px-4 py-2">April 10, 2024</td>
+                            <td class="border px-4 py-2">1949-FC vs Sea Eagles</td>
+                            <td class="border px-4 py-2">15:00</td>
+                        </tr>
+                        <tr class="bg-gray-100">
+                            <td class="border px-4 py-2">April 17, 2024</td>
+                            <td class="border px-4 py-2">Harbor United vs 1949-FC</td>
+                            <td class="border px-4 py-2">17:00</td>
+                        </tr>
+                        <tr class="bg-white">
+                            <td class="border px-4 py-2">April 24, 2024</td>
+                            <td class="border px-4 py-2">1949-FC vs Mount Pearl</td>
+                            <td class="border px-4 py-2">19:00</td>
+                        </tr>
+                        <tr class="bg-gray-100">
+                            <td class="border px-4 py-2">May 1, 2024</td>
+                            <td class="border px-4 py-2">City Wanderers vs 1949-FC</td>
+                            <td class="border px-4 py-2">20:00</td>
+                        </tr>
+                        <tr class="bg-white">
+                            <td class="border px-4 py-2">May 8, 2024</td>
+                            <td class="border px-4 py-2">1949-FC vs Coastal Strikers</td>
+                            <td class="border px-4 py-2">18:00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+       
+        
+        <!-- Team Information -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-2">Team Information</h2>
+            <p>Information about the soccer teams, including history, achievements, roster, etc.</p>
+        </section>
+        
+        <!-- Photo Gallery -->
+        <section class="mb-8 flex flex-col items-center justify-center bg-slate-800 text-white">
+            <h2 class="text-xl font-bold mb-4 ">Photo Gallery</h2>
+            <div class="grid grid-cols-4 gap-4 mb-1">
+                <% users.forEach(user => { %>
+                    <div class="border w-48 rounded-md hover:border-red-400 hover:border-4">
+                        <img src="<%= user.image_url ? user.image_url : '/images/default-image.svg' %>" alt="user image" class="w-48 h-28">
+                        <h1 class=" ml-2"><%= user.first_name +' '+user.last_name %></h1>
+                        <p class="ml-2">@<%= user.username%></p>
+                        <a class="text-blue-800 ml-2" href="/users/<%= user.user_id %>">View Profile</a>
+                    </div>
+                    <% }); %>
+            </div>        
+        </section>
+        
+        <!-- Fan Engagement -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-2">Join Our Community</h2>
+            <p>Engage with other fans, participate in discussions, and stay updated with newsletters.</p>
+            <!-- Engagement Form or Social Media Links -->
+        </section>
+        
+    </main>
+    <%- include ('./partials/footer.ejs') %>
+</body>
+</html>
