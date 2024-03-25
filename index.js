@@ -3,6 +3,7 @@ const app = express();
 const methodOverride = require('method-override');
 const port = 3000;
 const path = require('path');
+const {getUsers} = require('./services/users');
 global.DEBUG = true;
 
 // configure views and static files
@@ -13,10 +14,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 
-app.get('/', (req, res) => {
+
+app.get('/', async (req, res) => {
     if (DEBUG) console.log('GET /');
     // res.send('Hello World!');
-    res.render('index');
+    const users = await getUsers();
+    console.log('Showing Hoem page')
+    console.log(users);
+    res.render('index',{users:users});
     });
 // API routes
 const loginsRouter = require('./routes/api/logins');

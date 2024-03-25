@@ -94,6 +94,10 @@ router.get('/:id', async (req, res) => {
         const id = parseInt(req.params.id);
         console.log(id);
         const user = await getUserById(id);
+        if (!user) {
+            res.status(404).send('User not found');
+            return;
+        }
         console.log(user);
         res.render('user', { user: user });
     }
