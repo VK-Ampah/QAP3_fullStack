@@ -24,8 +24,6 @@ app.get('/', async (req, res) => {
     res.render('index',{users:users});
     });
 // API routes
-const loginsRouter = require('./routes/api/logins');
-app.use('/logins', loginsRouter);
 
 const usersRouter = require('./routes/api/users');
 app.use('/users', usersRouter);
