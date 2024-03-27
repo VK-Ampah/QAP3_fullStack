@@ -16,17 +16,16 @@ app.set('view engine', 'ejs');
 
 // home page
 app.get('/', async (req, res) => {
-    if (DEBUG) console.log('GET /');
+    if (DEBUG) console.log('GET / index page');
     const users = await getUsers();
     res.render('index',{users:users});
     });
 // API routes for users
-
 const usersRouter = require('./routes/api/users');
 app.use('/users', usersRouter);
 
 app.use((req, res,next) => {
-    res.status(404).send('Sorry cant find that!');
+    res.status(404).send('Sorry cant find the resource!');
     });
 
 app.listen(port, () => {

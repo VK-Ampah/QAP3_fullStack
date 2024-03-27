@@ -26,12 +26,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // users routes
-
-
 // Add a new user
 // Render the form for creating a new user
 router.get('/create', (req, res) => {
-    res.render('createUser');
+    try {
+        if (DEBUG) console.log('GET /users/create');
+        res.render('createUser');
+    }
+    catch (err) {
+        res.status(500).send('An error occurred while fetching the user');
+    }
 });
 
 // Handle the form submission
@@ -43,7 +47,6 @@ router.post('/create', upload.single('image'), async (req, res) => {
         const newUser = await addUser(req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, imageUrl);
         res.redirect('/users/' + newUser.user_id);
     } catch (err) {
-        console.error(err);
         res.status(500).send('An error occurred while creating the user');
     }
 });
@@ -57,7 +60,6 @@ router.get('/:id/edit', async (req, res) => {
         const user = await getUserById(id);       
         res.render('updateUser', { user: user });
     } catch (err) {
-        console.error(err);
         res.status(500).send('An error occurred while fetching the user');
     }
 });
@@ -69,7 +71,6 @@ router.patch('/:id/edit', upload.single('image'), async (req, res) => {
         const updatedUser = await updateUser(parseInt(req.params.id), req.body.firstname, req.body.middlename, req.body.lastname, req.body.email, req.body.username, imageUrl);
         res.redirect('/users/' + updatedUser.user_id);
     } catch (err) {
-        console.error(err);
         res.status(500).send('An error occurred while updating the user');
     }
 });
@@ -88,7 +89,6 @@ router.get('/:id', async (req, res) => {
         res.render('user', { user: user });
     }
     catch (err) {
-        console.error(err);
         res.status(500).send('An error occurred while retrieving the user');
     }
 }
@@ -102,7 +102,6 @@ router.get('/:id/delete', async (req, res) => {
         res.render('deleteUser', { user: user });
     }
     catch (err) {
-        console.error(err);
         res.status(500).send('An error occurred while fetching the user');
     }
 }
@@ -115,7 +114,6 @@ router.delete('/:id/delete', async (req, res) => {
         res.redirect('/users');
     }
     catch (err) {
-        console.error(err);
         res.status(500).send('An error occurred while deleting the user');
     }
 }
@@ -123,7 +121,7 @@ router.delete('/:id/delete', async (req, res) => {
 
 // return all users
 router.get('/', async (req, res) => {
-    if (DEBUG) console.log('inside the users home router')
+    if (DEBUG) console.log('GET /users/ home page')
     res.setHeader('Content-Type', 'text/html');
     res.status(200);
     const users = await getUsers();
@@ -141,7 +139,8 @@ router.use((req, res, next) => {
 // Error handling middleware
 router.use((error, req, res, next) => {
     if (error.status !== 404) {
-        console.error(error);
+        res.status(500).send('Internal Server Error');
+       
     }
     if (error instanceof SyntaxError) {
         res.status(400).send('Bad Request');
