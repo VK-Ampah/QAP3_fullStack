@@ -10,14 +10,15 @@ jest.mock('../dal.auth', () => ({
   query: jest.fn(),
 }));
 
-describe('User Service', () => {
+describe('Testing users api calls for GET, POST, PATCH, DELETE', () => {
     //action to take after each test// clear all mocks
     afterEach(() => {
         jest.clearAllMocks();
     });
 
     // Test cases for the getUsers function
-    describe('A a Manager I should be able to retrieve all soccer players from the users table', () => {
+    describe('Team Manager wants to be able to retrieve all soccer players from the users table', () => {
+        // This is a test case for retrieving all users
         it('should get all users in the users table', async () => {
             const mockRows = [{ id: 1, firstname: 'John', lastname:'Dougan', username:'skele', image_url:'/photos/image.jpg' }, { id: 2, name: 'Jane', lastname:'Doe', username:'janez', image_url:'/photos/image2.jpg'}];
             const mockQuery = jest.fn().mockResolvedValue({ rows: mockRows });
@@ -29,6 +30,8 @@ describe('User Service', () => {
             expect(result).toEqual(mockRows);
         });
 
+
+        // This is a test case for handling errors during query execution
         it('should throw an error if query execution fails', async () => {
             const mockError = new Error('Database error');
             const mockQuery = jest.fn().mockRejectedValue(mockError);
@@ -39,6 +42,7 @@ describe('User Service', () => {
         });
     });
 
+    // This is a test suite for the functionality of retrieving a player by their ID
     describe('A Coach wants to retrieve a player by their ID', () => {
         it('it should retrieve a user by ID', async () => {
             const mockId = 1;
@@ -52,6 +56,7 @@ describe('User Service', () => {
             expect(result).toEqual(mockUser);
         });
 
+        // This is a test case for handling a scenario where the user is not found
         it('should throw an error if user is not found', async () => {
             const mockId = 1;
             const mockQuery = jest.fn().mockResolvedValue({ rows: [] });
@@ -61,6 +66,7 @@ describe('User Service', () => {
             expect(pool.query).toHaveBeenCalledWith('SELECT * FROM users WHERE user_id = $1;', [mockId]);
         });
 
+        // This is a test case for handling errors during query execution
         it('should throw an error if query execution fails', async () => {
             const mockId = 1;
             const mockError = new Error('Database error');
@@ -72,84 +78,12 @@ describe('User Service', () => {
         });
     });
 
-    // describe('Team management wants to be able to add new players to the team', () => {
-    //     it('should add a new user', async () => {
-    //         const mockUser = {
-    //             firstname: 'John',
-    //             middlename: 'Doe',
-    //             lastname: 'Smith',
-    //             email: 'john.doe@example.com',
-    //             username: 'johndoe',
-    //             image_url: 'https://example.com/avatar.jpg',
-    //         };
-    //         const mockQuery = jest.fn().mockResolvedValue({ rows: [mockUser] });
-    //         pool.query.mockImplementation(mockQuery);
-
-    //         const result = await addUser(
-    //             mockUser.firstname,
-    //             mockUser.middlename,
-    //             mockUser.lastname,
-    //             mockUser.email,
-    //             mockUser.username,
-    //             mockUser.image_url
-    //         );
-
-    //         expect(pool.query).toHaveBeenCalledWith(
-    //             'INSERT INTO users (first_name, middle_name, last_name, email, username, image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;',
-    //             [
-    //                 mockUser.firstname,
-    //                 mockUser.middlename,
-    //                 mockUser.lastname,
-    //                 mockUser.email,
-    //                 mockUser.username,
-    //                 mockUser.image_url,
-    //             ]
-    //         );
-    //         expect(result).toEqual(mockUser);
-    //     });
-
-    //     it('should throw an error if query execution fails', async () => {
-    //         const mockUser = {
-    //             firstname: 'John',
-    //             middlename: 'Doe',
-    //             lastname: 'Smith',
-    //             email: 'john.doe@example.com',
-    //             username: 'johndoe',
-    //             image_url: 'https://example.com/avatar.jpg',
-    //         };
-    //         const mockError = new Error('Database error');
-    //         const mockQuery = jest.fn().mockRejectedValue(mockError);
-    //         pool.query.mockImplementation(mockQuery);
-
-    //         await expect(
-    //             addUser(
-    //                 mockUser.firstname,
-    //                 mockUser.middlename,
-    //                 mockUser.lastname,
-    //                 mockUser.email,
-    //                 mockUser.username,
-    //                 mockUser.image_url
-    //             )
-    //         ).rejects.toThrow(mockError);
-    //         expect(pool.query).toHaveBeenCalledWith(
-    //             'INSERT INTO users (first_name, middle_name, last_name, email, username, image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;',
-    //             [
-    //                 mockUser.firstname,
-    //                 mockUser.middlename,
-    //                 mockUser.lastname,
-    //                 mockUser.email,
-    //                 mockUser.username,
-    //                 mockUser.image_url,
-    //             ]
-    //         );
-    //     });
-    // });
 
     // This is a test suite for the functionality of adding new players to the team
     describe('Team management wants to be able to add new players to the team', () => {
-        // This is a test case for adding a new user
-        it('should add a new user', async () => {
-            // This is a mock user object
+        
+        // This is a test case for adding a new player
+        it('should add a new user', async () => {         
             const mockUser = {
                 firstname: 'John',
                 middlename: 'Doe',
@@ -157,13 +91,9 @@ describe('User Service', () => {
                 email: 'john.doe@example.com',
                 username: 'johndoe',
                 image_url: 'https://example.com/avatar.jpg',
-            };
-            // This is a mock function that simulates the pool.query function
-            const mockQuery = jest.fn().mockResolvedValue({ rows: [mockUser] });
-            // This replaces the actual implementation of pool.query with the mock function
-            pool.query.mockImplementation(mockQuery);
-
-            // This calls the addUser function with the mock user data and waits for it to resolve
+            };        
+            const mockQuery = jest.fn().mockResolvedValue({ rows: [mockUser] });         
+            pool.query.mockImplementation(mockQuery);            
             const result = await addUser(
                 mockUser.firstname,
                 mockUser.middlename,
@@ -171,9 +101,7 @@ describe('User Service', () => {
                 mockUser.email,
                 mockUser.username,
                 mockUser.image_url
-            );
-
-            // This asserts that pool.query was called with the correct SQL query and parameters
+            );           
             expect(pool.query).toHaveBeenCalledWith(
                 'INSERT INTO users (first_name,middle_name,last_name,email,username,image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;',
                 [
@@ -184,14 +112,13 @@ describe('User Service', () => {
                     mockUser.username,
                     mockUser.image_url,
                 ]
-            );
-            // This asserts that the result of the addUser function is equal to the mock user object
+            );       
             expect(result).toEqual(mockUser);
         });
 
         // This is a test case for handling errors during query execution
         it('should throw an error if query execution fails', async () => {
-            // This is a mock user object
+         
             const mockUser = {
                 firstname: 'John',
                 middlename: 'Doe',
@@ -199,15 +126,10 @@ describe('User Service', () => {
                 email: 'john.doe@example.com',
                 username: 'johndoe',
                 image_url: 'https://example.com/avatar.jpg',
-            };
-            // This is a mock error object
-            const mockError = new Error('Database error');
-            // This is a mock function that simulates the pool.query function but rejects with the mock error
-            const mockQuery = jest.fn().mockRejectedValue(mockError);
-            // This replaces the actual implementation of pool.query with the mock function
+            };        
+            const mockError = new Error('Database error');           
+            const mockQuery = jest.fn().mockRejectedValue(mockError);            
             pool.query.mockImplementation(mockQuery);
-
-            // This calls the addUser function with the mock user data and expects it to throw the mock error
             await expect(
                 addUser(
                     mockUser.firstname,
@@ -217,8 +139,7 @@ describe('User Service', () => {
                     mockUser.username,
                     mockUser.image_url
                 )
-            ).rejects.toThrow(mockError);
-            // This asserts that pool.query was called with the correct SQL query and parameters
+            ).rejects.toThrow(mockError);       
             expect(pool.query).toHaveBeenCalledWith(
                 'INSERT INTO users (first_name,middle_name,last_name,email,username,image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;',
                 [
@@ -233,9 +154,8 @@ describe('User Service', () => {
         });
     });
 
-
-
-    describe('updateUser', () => {
+    // This is a test suite for the functionality of updating player details
+    describe('Team management wants to be able to update players details', () => {
         it('should update a user', async () => {
             const mockId = 1;
             const mockUser = {
@@ -249,7 +169,6 @@ describe('User Service', () => {
             };
             const mockQuery = jest.fn().mockResolvedValue({ rows: [mockUser] });
             pool.query.mockImplementation(mockQuery);
-
             const result = await updateUser(
                 mockId,
                 mockUser.firstname,
@@ -259,7 +178,6 @@ describe('User Service', () => {
                 mockUser.username,
                 mockUser.image_url
             );
-
             expect(pool.query).toHaveBeenCalledWith(
                 'UPDATE users SET first_name = $1, middle_name = $2, last_name = $3, email = $4, username = $5, image_url = $6 WHERE user_id = $7 RETURNING *;',
                 [
@@ -275,6 +193,7 @@ describe('User Service', () => {
             expect(result).toEqual(mockUser);
         });
 
+        // This is a test case for handling errors during query execution
         it('should throw an error if query execution fails', async () => {
             const mockId = 1;
             const mockUser = {
@@ -316,7 +235,8 @@ describe('User Service', () => {
         });
     });
 
-    describe('deleteUser', () => {
+    // This is a test suite for the functionality of deleting a player
+    describe('Management want to be able to delete players who are no longer with the team', () => {
         it('should delete a user', async () => {
             const mockId = 1;
             const mockUser = { id: mockId, name: 'John Doe' };
@@ -329,6 +249,7 @@ describe('User Service', () => {
             expect(result).toEqual(mockUser);
         });
 
+        // This is a test case for handling errors during query execution
         it('should throw an error if query execution fails', async () => {
             const mockId = 1;
             const mockError = new Error('Database error');
