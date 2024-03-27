@@ -4,7 +4,7 @@ const methodOverride = require('method-override');
 const port = 3000;
 const path = require('path');
 const {getUsers} = require('./services/users');
-global.DEBUG = true;
+global.DEBUG = false;
 
 // configure views and static files
 app.use(express.urlencoded({ extended: true }));
@@ -14,22 +14,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 
-
+// home page
 app.get('/', async (req, res) => {
-    if (DEBUG) console.log('GET /');
-    // res.send('Hello World!');
+    if (DEBUG) console.log('GET / index page');
     const users = await getUsers();
-    console.log('Showing Hoem page')
-    console.log(users);
     res.render('index',{users:users});
     });
-// API routes
-
+// API routes for users
 const usersRouter = require('./routes/api/users');
 app.use('/users', usersRouter);
 
 app.use((req, res,next) => {
-    res.status(404).send('Sorry cant find that!');
+    res.status(404).send('Sorry cant find the resource!');
     });
 
 app.listen(port, () => {

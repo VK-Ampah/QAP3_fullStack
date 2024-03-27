@@ -95,15 +95,33 @@
         <!-- Photo Gallery -->
         <section class="mb-8 flex flex-col items-center justify-center bg-slate-800 text-white">
             <h2 class="text-xl font-bold mb-4 ">Photo Gallery</h2>
-            <div class="grid grid-cols-4 gap-4 mb-1">
-                <% users.forEach(user => { %>
-                    <div class="border w-48 rounded-md hover:border-red-400 hover:border-4">
-                        <img src="<%= user.image_url ? user.image_url : '/images/default-image.svg' %>" alt="user image" class="w-48 h-28">
-                        <h1 class=" ml-2"><%= user.first_name +' '+user.last_name %></h1>
-                        <p class="ml-2">@<%= user.username%></p>
-                        <a class="text-blue-800 ml-2" href="/users/<%= user.user_id %>">View Profile</a>
-                    </div>
+            <div class="grid grid-cols-2 gap-4 md:grid-cols-4 mb-1">
+                <% if (users && users.length > 0) { %>
+                    <% users.forEach(user => { %>
+                        <div class="border w-24 md:w-40 hover:border-blue-500/50 hover:border-4 shadow-lg shadow-blue-500/50 ">
+                            <div>
+                                <img src="<%= user.image_url ? user.image_url : '/images/default-image.svg' %>" alt="user image" class="w-24 md:w-40 h-14 md:h-20">
+                                <h1 class=" ml-2 text-xs md:text-sm font-thin md:font-medium"><%= user.first_name +' '+user.last_name %></h1>
+                                <p class="ml-2 text-xs md:text-sm font-thin md:font-medium">@<%= user.username%></p>
+                            </div>
+                            <div class=" m-1 md:m-2">
+                                <a class="text-white text-xs md:text-sm bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 shadow-lg shadow-blue-500/50 font-thin md:font-medium rounded-lg px-1 md:px-5 py-1 md:py-2.5 text-center md:me-2" href="/users/<%= user.user_id %>">View Profile</a>
+                            </div>
+                        </div>
                     <% }); %>
+                <% } else { %>
+                    <!-- Skeleton cards -->
+                    <% for(let i = 0; i < 3; i++) { %>
+                        <div class="border border-slate-700 w-40 hover:border-red-400 hover:border-4 animate-pulse">
+                            <div class="bg-slate-700 w-40 h-20"></div> <!-- Image placeholder -->
+                            <div class="space-y-2 p-2">
+                                <div class="h-4 bg-slate-700 rounded"></div> <!-- Name placeholder -->
+                                <div class="h-4 bg-slate-700 rounded w-3/4"></div> <!-- Username placeholder -->
+                                <div class="h-4 bg-blue-800 rounded w-1/2"></div> <!-- View Profile placeholder -->
+                            </div>
+                        </div>
+                    <% } %>
+                <% } %>
             </div>        
         </section>
         
